@@ -222,6 +222,7 @@ def show_venue(venue_id):
     "upcoming_shows_count": 1,
   }
   #data = list(filter(lambda d: d['id'] == venue_id, [data1, data2, data3]))[0]
+
   venue=Venue.query.get(venue_id)
   venue.genres= venue.genres.split('#')[1:]
 
@@ -233,9 +234,8 @@ def show_venue(venue_id):
     if show.start_time>datetime.datetime.now():
       info={}
       info['artist_id']=show.artist_id
-      artist=Artist.query.get(show.artist_id)
-      info['artist_name']=artist.name
-      info['artist_image_link']=artist.image_link
+      info['artist_name']=show.artist.name
+      info['artist_image_link']=show.artist.image_link
       info['start_time']=datetime.datetime.strftime(show.start_time,'%Y-%m-%d %H:%M:%S')
       venue.upcoming_shows.append(info)
       venue.upcoming_shows_count+=1
@@ -412,11 +412,10 @@ def show_artist(artist_id):
   artist.past_shows_count=0
   artist_shows=Show.query.filter_by(artist_id=artist_id)
   for s in artist_shows:
-    s_venue=Venue.query.get(s.venue_id)
     d={}
-    d['id']=s_venue.id
-    d['venue_name']=s_venue.name
-    d['venue_image_link']=s_venue.image_link
+    d['id']=s.venue.id
+    d['venue_name']=s.venue.name
+    d['venue_image_link']=s.venue.image_link
     d['start_time']=datetime.datetime.strftime(s.start_time,'%Y-%m-%d %H:%M:%S')
     if s.start_time>=datetime.datetime.now():
       artist.upcoming_shows.append(d)
