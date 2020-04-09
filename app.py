@@ -53,7 +53,7 @@ class Artist(db.Model):
     city = db.Column(db.String(120))
     state = db.Column(db.String(120))
     phone = db.Column(db.String(120))
-    genres = db.Column(db.String(120))  # TODO should be a list
+    genres = db.Column(db.String(120))  
     seeking_venue=db.Column(db.Boolean,default=False)
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(500))
@@ -124,7 +124,7 @@ def search_venues():
   response['count']=0
   response['data']=[]
   search_term=request.form.get('search_term', '')
-  matching=Venue.query.filter(Venue.name.ilike('%'+search_term+'%'))
+  matching=Venue.query.filter(Venue.name.ilike('%'+search_term+'%')).all()
   for match in matching:
     d={}
     d['id']=match.id
@@ -229,7 +229,7 @@ def search_artists():
   response['count']=0
   response['data']=[]
   search_term=request.form.get('search_term', '')
-  matching=Artist.query.filter(Artist.name.ilike('%'+search_term+'%'))
+  matching=Artist.query.filter(Artist.name.ilike('%'+search_term+'%')).all()
   for match in matching:
     d={}
     d['id']=match.id

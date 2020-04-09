@@ -5,8 +5,9 @@ from wtforms.validators import DataRequired, AnyOf, URL, ValidationError, Regexp
 import re
 
 def isValidPhone(form, field):
-	if not re.search(r"^[0-9]{3}-[0-9]{3}-[0-9]{4}$", field.data) and field.data > 10:
-		raise ValidationError("Invalid phone number.")
+    print('isValidPhone called!!!!!!!!!!!!')
+    if len(field.data)<10 or not re.search(r"^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$", field.data):
+	    raise ValidationError("Invalid phone number.")
 
 
 class ShowForm(Form):
@@ -194,7 +195,7 @@ class ArtistForm(Form):
     )
     phone = StringField(
         # TODO implement validation logic for state
-        'phone', validators=[isValidPhone,Length(min=10, max=18)]
+        'phone', validators=[Regexp(r'^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$')]
     )
 
 
