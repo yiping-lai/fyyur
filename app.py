@@ -70,7 +70,7 @@ class Show(db.Model):
   start_time=db.Column(db.DateTime)
 
 
-#db.create_all()
+
 #----------------------------------------------------------------------------#
 # Filters.
 #----------------------------------------------------------------------------#
@@ -94,8 +94,7 @@ def index():
   return render_template('pages/home.html')
 
 
-#  Venues
-#  ----------------------------------------------------------------
+#-------------------Venues-------------------#
 
 @app.route('/venues')
 def venues():
@@ -139,13 +138,11 @@ def search_venues():
 @app.route('/venues/<int:venue_id>')
 def show_venue(venue_id):
   # shows the venue page with the given venue_id
-    #data = list(filter(lambda d: d['id'] == venue_id, [data1, data2, data3]))[0]
-
   venue=Venue.query.get(venue_id)
   venue.genres= venue.genres.split('#')[1:]
 
   # get shows information
-  venue_shows=Show.query.filter(venue_id=venue_id).all()
+  venue_shows=Show.query.filter(Show.venue_id==venue_id).all()
   venue.upcoming_shows=[]
   venue.upcoming_shows_count=0
   for show in venue_shows:
@@ -161,16 +158,16 @@ def show_venue(venue_id):
   
   return render_template('pages/show_venue.html', venue=venue)
 
-#  Create Venue
-#  ----------------------------------------------------------------
 
 @app.route('/venues/create', methods=['GET'])
 def create_venue_form():
+  # show form for new venue
   form = VenueForm()
   return render_template('forms/new_venue.html', form=form)
 
 @app.route('/venues/create', methods=['POST'])
 def create_venue_submission():
+  # create Venue
   msg=''
   try:    
     d=request.form.to_dict()
@@ -214,8 +211,8 @@ def delete_venue(venue_id):
 
   return 
 
-#  Artists
-#  ----------------------------------------------------------------
+#-------------------Artists-------------------#
+
 @app.route('/artists')
 def artists():
   return render_template('pages/artists.html', artists=Artist.query.all())
@@ -271,7 +268,6 @@ def show_artist(artist_id):
   return render_template('pages/show_artist.html', artist=artist)
 
 #  Update
-#  ----------------------------------------------------------------
 @app.route('/artists/<int:artist_id>/edit', methods=['GET'])
 def edit_artist(artist_id):
   form = ArtistForm()
@@ -307,8 +303,7 @@ def edit_artist_submission(artist_id):
 
 @app.route('/venues/<int:venue_id>/edit', methods=['GET'])
 def edit_venue(venue_id):
-  form = VenueForm()
- 
+  form = VenueForm() 
   return render_template('forms/edit_venue.html', form=form, venue=Venue.query.get(venue_id))
 
 @app.route('/venues/<int:venue_id>/edit', methods=['POST'])
@@ -338,7 +333,6 @@ def edit_venue_submission(venue_id):
   return redirect(url_for('show_venue', venue_id=venue_id))
 
 #  Create Artist
-#  ----------------------------------------------------------------
 
 @app.route('/artists/create', methods=['GET'])
 def create_artist_form():
@@ -382,8 +376,7 @@ def create_artist_submission():
   return render_template('pages/home.html')
 
 
-#  Shows
-#  ----------------------------------------------------------------
+#-----------Shows-----------#
 
 @app.route('/shows')
 def shows():
@@ -427,6 +420,11 @@ def create_show_submission():
 
   return render_template('pages/home.html')
 
+
+
+#----------------------------------------------------------------------------#
+# Error handling
+#----------------------------------------------------------------------------#
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('errors/404.html'), 404
