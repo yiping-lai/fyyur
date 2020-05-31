@@ -79,7 +79,7 @@ To start and run the local development server,
   ```
 
 3. Set up connection to a database in `config.py` and populate the postgres database with properly configured tables for this application's objects
-   ```
+  ```
   $ flask db upgrade
   ```  
   
